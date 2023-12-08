@@ -1,0 +1,21 @@
+name: 'Release new Version :rocket:'
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Latest Harbor Version
+        
+jobs:
+  release_version:
+    runs-on: ubuntu-latest
+    steps:
+      - action: actions/checkout@v5
+      - name: 'Update Version'
+        run: |
+          echo "todo update Makefile"
+      - name: 'Cleanup'
+        run: |
+          rm pkg --recursive --force
+      - name: 'Run Update'
+        run: |
+          make update-spec VERSION=v${{ github.event.inputs.version }}
