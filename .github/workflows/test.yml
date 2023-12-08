@@ -17,9 +17,6 @@ jobs:
       - name: 'Update Version'
         run: |
           echo "todo update Makefile"
-      - name: 'Cleanup'
-        run: |
-          rm --recursive --force pkg/sdk/v2.0/models pkg/sdk/v2.0/client
       - name: 'Run Update'
         run: |
           make gen-harbor-api VERSION=v${{ github.event.inputs.version }}
