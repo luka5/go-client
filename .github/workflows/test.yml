@@ -20,4 +20,11 @@ jobs:
       - name: 'Run Update'
         run: |
           make update-spec VERSION=v${{ github.event.inputs.version }}
-      # TODO commit and push to new branch, create PR?
+      - name: Create commits
+        run: |
+          git config user.name ${{ github.actor }}
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git add -A
+          git commit -m "Bump Version ${{ github.event.inputs.version }}"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
