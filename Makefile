@@ -4,7 +4,7 @@ SHELL := /usr/bin/env bash
 
 DOCKERCMD=$(shell which docker)
 SWAGGER_VERSION=v0.30.3
-SWAGGER := $(DOCKERCMD) run --rm -t -v $(HOME):$(HOME) -w $(shell pwd) quay.io/goswagger/swagger:$(SWAGGER_VERSION)
+SWAGGER := $(DOCKERCMD) run --rm -t -u "$(id -u)" -v $(HOME):$(HOME) -w $(shell pwd) quay.io/goswagger/swagger:$(SWAGGER_VERSION)
 
 ifeq ($(VERSION),)
 VERSION := v2.8.2
