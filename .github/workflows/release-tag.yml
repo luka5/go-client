@@ -14,9 +14,15 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - name: create pull request
+      - name: create tag
         run: |
           version=$(make get-go-version)
-          gh release create "${version}"
+          if gh release view ${version} &> /dev/null; then
+            echo "Release ${version} already exists"
+            exit 0
+          else
+            echo "Creating Release ${version}"
+            gh release create "${version}"  
+          fi
         env:
           GITHUB_TOKEN: ${{ github.token }}
