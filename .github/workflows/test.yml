@@ -1,5 +1,5 @@
-name: Release new Version
-run-name: ${{ github.actor }} is releasing a new Version 🚀
+name: Prepare new Release
+run-name: ${{ github.actor }} is preparing a new Release 🚀
 on:
   workflow_dispatch:
     inputs:
@@ -7,7 +7,7 @@ on:
         description: Define Harbor Version
 
 jobs:
-  release_version:
+  prepare_new_release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,9 +26,11 @@ jobs:
           git checkout -B release-version-${{ github.event.inputs.version }}
           git add -A
           git commit -m "Release Version ${{ github.event.inputs.version }}"
-          git push origin release-version-${{ github.event.inputs.version }}
+          git push origin release-version-${{ github.event.inputs.version }} || {
+            echo "Release branch already exists, skipping push";
+            exit 1;
+          }
       - name: create pull request
         run: gh pr create -B main -H release-version-${{ github.event.inputs.version }} --title 'Release Version ${{ github.event.inputs.version }}' --body 'Created by Github action'
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      # todo we need to create a tag - after the merge was done!
