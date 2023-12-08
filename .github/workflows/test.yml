@@ -23,14 +23,18 @@ jobs:
         run: |
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
-          git checkout -B release-version-${{ github.event.inputs.version }}
+          git switch release-version-${{ github.event.inputs.version }} || git switch -c release-version-${{ github.event.inputs.version }}
           git add -A
           git commit -m "Release Version ${{ github.event.inputs.version }}"
-          git push origin release-version-${{ github.event.inputs.version }} || {
-            echo "Release branch might already exists, push failed"
-            exit 1
-          }
+          git push origin release-version-${{ github.event.inputs.version }}
       - name: create pull request
-        run: gh pr create -B main -H release-version-${{ github.event.inputs.version }} --title 'Release Version ${{ github.event.inputs.version }}' --body 'Created by Github action'
+        run: |
+          if gh pr view release-version-${{ github.event.inputs.version }}; then
+            echo "Pull request release-version-${{ github.event.inputs.version }} already exists"
+            exit 0
+          else
+            echo "Creating Pull request release-version-${{ github.event.inputs.version }}"
+            gh pr create -B main -H release-version-${{ github.event.inputs.version }} --title 'Release Version ${{ github.event.inputs.version }}' --body 'Created by Github action'
+          fi
         env:
           GITHUB_TOKEN: ${{ github.token }}
