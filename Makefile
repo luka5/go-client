@@ -42,4 +42,7 @@ cleanup:
 test: ## run the test
 	go test ./...
 
+get-go-version:
+	@echo "$(VERSION)" | sed -E "s/v([0-9]+)\.([0-9]+)\.([0-9]+)/v0.\1\2.\3/g" -
+
 all: cleanup gen-harbor-api
