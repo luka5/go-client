@@ -1,0 +1,22 @@
+name: Release new Version Tag
+run-name: ${{ github.actor }} is tagging a new Release 🚀
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  release_version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: create pull request
+        run: |
+          version=$(make get-go-version)
+          gh release create "${version}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
