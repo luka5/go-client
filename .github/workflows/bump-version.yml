@@ -9,7 +9,7 @@ jobs:
   release_version:
     runs-on: ubuntu-latest
     steps:
-      - action: actions/checkout@v5
+      - run: actions/checkout@v5
       - name: 'Update Version'
         run: |
           echo "todo update Makefile"
