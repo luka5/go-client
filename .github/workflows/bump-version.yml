@@ -1,4 +1,5 @@
-name: 'Release new Version :rocket:'
+name: Release new Version
+run-name: ${{ github.actor }} is releasing a new Version 🚀
 on:
   workflow_dispatch:
     inputs:
@@ -9,7 +10,7 @@ jobs:
   release_version:
     runs-on: ubuntu-latest
     steps:
-      - run: actions/checkout@v5
+      - uses: actions/checkout@v5
       - name: 'Update Version'
         run: |
           echo "todo update Makefile"
