@@ -19,7 +19,7 @@ jobs:
           rm pkg --recursive --force
       - name: 'Run Update'
         run: |
-          make update-spec VERSION=v${{ github.event.inputs.version }}
+          make gen-harbor-api VERSION=v${{ github.event.inputs.version }}
       - name: Create commits
         run: |
           git config user.name ${{ github.actor }}
