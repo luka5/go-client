@@ -123,9 +123,6 @@ type ConfigurationsResponse struct {
 	// Verify the OIDC provider's certificate'
 	OIDCVerifyCert *BoolConfigItem `json:"oidc_verify_cert,omitempty"`
 
-	// The flag to indicate whether the current auth mode should consider as a primary one.
-	PrimaryAuthMode *BoolConfigItem `json:"primary_auth_mode,omitempty"`
-
 	// Indicate who can create projects, it could be ''adminonly'' or ''everyone''.
 	ProjectCreationRestriction *StringConfigItem `json:"project_creation_restriction,omitempty"`
 
@@ -143,9 +140,6 @@ type ConfigurationsResponse struct {
 
 	// scan all policy
 	ScanAllPolicy *ConfigurationsResponseScanAllPolicy `json:"scan_all_policy,omitempty"`
-
-	// Whether or not to skip update the pull time for scanner
-	ScannerSkipUpdatePulltime *BoolConfigItem `json:"scanner_skip_update_pulltime,omitempty"`
 
 	// Whether the Harbor instance supports self-registration.  If it''s set to false, admin need to add user to the instance.
 	SelfRegistration *BoolConfigItem `json:"self_registration,omitempty"`
@@ -319,10 +313,6 @@ func (m *ConfigurationsResponse) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validatePrimaryAuthMode(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.validateProjectCreationRestriction(formats); err != nil {
 		res = append(res, err)
 	}
@@ -344,10 +334,6 @@ func (m *ConfigurationsResponse) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateScanAllPolicy(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateScannerSkipUpdatePulltime(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -1058,25 +1044,6 @@ func (m *ConfigurationsResponse) validateOIDCVerifyCert(formats strfmt.Registry)
 	return nil
 }
 
-func (m *ConfigurationsResponse) validatePrimaryAuthMode(formats strfmt.Registry) error {
-	if swag.IsZero(m.PrimaryAuthMode) { // not required
-		return nil
-	}
-
-	if m.PrimaryAuthMode != nil {
-		if err := m.PrimaryAuthMode.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("primary_auth_mode")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("primary_auth_mode")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *ConfigurationsResponse) validateProjectCreationRestriction(formats strfmt.Registry) error {
 	if swag.IsZero(m.ProjectCreationRestriction) { // not required
 		return nil
@@ -1183,25 +1150,6 @@ func (m *ConfigurationsResponse) validateScanAllPolicy(formats strfmt.Registry) 
 				return ve.ValidateName("scan_all_policy")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("scan_all_policy")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigurationsResponse) validateScannerSkipUpdatePulltime(formats strfmt.Registry) error {
-	if swag.IsZero(m.ScannerSkipUpdatePulltime) { // not required
-		return nil
-	}
-
-	if m.ScannerSkipUpdatePulltime != nil {
-		if err := m.ScannerSkipUpdatePulltime.Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("scanner_skip_update_pulltime")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("scanner_skip_update_pulltime")
 			}
 			return err
 		}
@@ -1525,10 +1473,6 @@ func (m *ConfigurationsResponse) ContextValidate(ctx context.Context, formats st
 		res = append(res, err)
 	}
 
-	if err := m.contextValidatePrimaryAuthMode(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
 	if err := m.contextValidateProjectCreationRestriction(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -1550,10 +1494,6 @@ func (m *ConfigurationsResponse) ContextValidate(ctx context.Context, formats st
 	}
 
 	if err := m.contextValidateScanAllPolicy(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateScannerSkipUpdatePulltime(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -2159,22 +2099,6 @@ func (m *ConfigurationsResponse) contextValidateOIDCVerifyCert(ctx context.Conte
 	return nil
 }
 
-func (m *ConfigurationsResponse) contextValidatePrimaryAuthMode(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.PrimaryAuthMode != nil {
-		if err := m.PrimaryAuthMode.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("primary_auth_mode")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("primary_auth_mode")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (m *ConfigurationsResponse) contextValidateProjectCreationRestriction(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.ProjectCreationRestriction != nil {
@@ -2263,22 +2187,6 @@ func (m *ConfigurationsResponse) contextValidateScanAllPolicy(ctx context.Contex
 				return ve.ValidateName("scan_all_policy")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("scan_all_policy")
-			}
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ConfigurationsResponse) contextValidateScannerSkipUpdatePulltime(ctx context.Context, formats strfmt.Registry) error {
-
-	if m.ScannerSkipUpdatePulltime != nil {
-		if err := m.ScannerSkipUpdatePulltime.ContextValidate(ctx, formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("scanner_skip_update_pulltime")
-			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("scanner_skip_update_pulltime")
 			}
 			return err
 		}
