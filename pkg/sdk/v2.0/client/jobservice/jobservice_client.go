@@ -18,11 +18,6 @@ import (
 // API is the interface of the jobservice client
 type API interface {
 	/*
-	   ActionGetJobLog gets job log by job id
-
-	   Get job log by job id, it is only used by administrator*/
-	ActionGetJobLog(ctx context.Context, params *ActionGetJobLogParams) (*ActionGetJobLogOK, error)
-	/*
 	   ActionPendingJobs stops and clean pause resume pending jobs in the queue
 
 	   stop and clean, pause, resume pending jobs in the queue*/
@@ -65,33 +60,6 @@ type Client struct {
 	transport runtime.ClientTransport
 	formats   strfmt.Registry
 	authInfo  runtime.ClientAuthInfoWriter
-}
-
-/*
-ActionGetJobLog gets job log by job id
-
-Get job log by job id, it is only used by administrator
-*/
-func (a *Client) ActionGetJobLog(ctx context.Context, params *ActionGetJobLogParams) (*ActionGetJobLogOK, error) {
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "actionGetJobLog",
-		Method:             "GET",
-		PathPattern:        "/jobservice/jobs/{job_id}/log",
-		ProducesMediaTypes: []string{"text/plain"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http", "https"},
-		Params:             params,
-		Reader:             &ActionGetJobLogReader{formats: a.formats},
-		AuthInfo:           a.authInfo,
-		Context:            ctx,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*ActionGetJobLogOK), nil
-
 }
 
 /*
